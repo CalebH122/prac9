@@ -37,6 +37,24 @@ def main():
         # shutil.move(filename, 'temp/' + new_name)
 
 
+def filename_fix(filename):
+    new_name = filename.replace(' ', '_') and filename('.TXT', '.txt')
+    for i, char in enumerate(new_name):
+        try:
+            if new_name[i].isalpha() and new_name[i + 1].isupper():
+                new_name = new_name[:i + 1] + '_' + new_name[i + 1]
+        except IndexError:
+            pass
+    final_name = new_name
+    for i, char in enumerate(final_name):
+        try:
+            if final_name[i] == "_" and final_name[i + 1].islower():
+                final_name = final_name[:i + 1] + final_name[i + 1].upper() + final_name[i + 2:]
+        except IndexError:
+            pass
+    return final_name
+
+
 def get_fixed_filename(filename):
     """Return a 'fixed' version of filename."""
     new_name = filename.replace(" ", "_").replace(".TXT", ".txt")
@@ -55,7 +73,7 @@ def demo_walk():
         # TODO: add a loop to rename the files
         for filename in filenames:
             old_name = os.path.join(directory_name, filename)
-            new_name = os.path.join(directory_name, get_fixed_filename(filename))
+            new_name = os.path.join(directory_name, filename_fix(filename))
             os.rename(old_name, new_name)
 
 
